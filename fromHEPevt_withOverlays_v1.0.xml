@@ -14,8 +14,11 @@
 <!ENTITY run_type "physics">
 <!ENTITY tag "MCC9_HEPevt_withOverlays">
 <!ENTITY prod_mode "test"> 
+<!ENTITY FCL_DIR "/pnfs/uboone/resilient/users/markross/fcls/">
 <!ENTITY template_fcl "HEPevt_AddOverlay_batch_TEMPLATE.fcl">
 <!ENTITY local_fcl "HEPevt_AddOverlay_batch_LOCAL.fcl">
+<!ENTITY HEP_tar "/pnfs/uboone/resilient/users/markross/tars/SplittingHEP_40evts.tar">
+<!ENTITY unzip_sript "/pnfs/uboone/resilient/users/markross/scripts/unzip_script_HEPevt.sh">
 ]>
 
 <project name="&name;">
@@ -42,13 +45,13 @@
   <check>0</check>
   <copy>0</copy>
 
-   <fcldir>/uboone/app/users/gge/CoherentGamma/fhicls</fcldir>
+   <fcldir>&FCL_DIR;</fcldir>
 
   <!-- Project stages -->
 
   <!-- First stage, turn HEPevt into artroot, and add overlays -->
   <stage name="genartroot">
-    <initsource>/pnfs/uboone/resilient/users/markross/scripts/unzip_script_HEPevt.sh</initsource>
+    <initsource>&unzip_script;</initsource>
     <inputdef>markross_gLEE_DarkNus_Overlay_prod_extunbiased_swizzle_inclusive_v3_goodruns_mcc9_run1_high_lifetime_overlay_bnb_nu_lowE_40min</inputdef>
     <fcl>&local_fcl;</fcl>
     <outdir>/pnfs/uboone/scratch/users/&user_id;/&tag;/&release;/genartroot/&name;</outdir>
@@ -63,7 +66,7 @@
     <memory>2000</memory> <!-- 2k-->
      <!--<prestagefraction>0.8</prestagefraction>-->
      <jobsub> --expected-lifetime=long --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' </jobsub>
-     <jobsub_start>   --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' -f /pnfs/uboone/resilient/users/markross/TextGenLists/KeystoneTestPoints_Jan2023_v1.tar -f &template_fcl; </jobsub_start>
+     <jobsub_start>   --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' -f &HEP_tar; -f &template_fcl; </jobsub_start>
   </stage>  
 
   <!-- Second stage, do a full-chain simulation to the artroot output from previous stage -->
