@@ -66,7 +66,7 @@
     <memory>2000</memory> <!-- 2k-->
      <!--<prestagefraction>0.8</prestagefraction>-->
      <jobsub> --expected-lifetime=long --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' </jobsub>
-     <jobsub_start>   --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' -f &HEP_tar; -f &template_fcl; </jobsub_start>
+     <jobsub_start>   --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' -f &HEP_tar; -f &FCL_DIR;/&template_fcl; </jobsub_start>
   </stage>  
 
   <!-- Second stage, do a full-chain simulation to the artroot output from previous stage -->
