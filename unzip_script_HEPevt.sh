@@ -16,10 +16,10 @@
 #!/bin/bash
 
 ## configurable parameter
-TARname="KeystoneTestPoints_Jan2023_v1.tar"
-DirName="KeystoneTestPoints_Jan2023/"
+TARname="SplittingHEP_40evts.tar"
+DirName="SplittingHEP/"
 ##DirName=$(basename -s .tar $TARname)'
-FileListName="TPA_m5_0.19_m4_0.05_mzprime_0.06_dirac.hepevt.spllit.files"   # name of the list of HEPevt files
+FileListName="HEPevt_Isotropic_EpEm_fixed_Pos_Oct2024_v1.1_splited_file_40evts.list"   # name of the list of HEPevt files
 
 TemplateFhicl="HEPevt_AddOverlay_batch_TEMPLATE.fcl"
 FinalFhicl="HEPevt_AddOverlay_batch_LOCAL.fcl"
@@ -38,11 +38,6 @@ tar -xvf $TARname
 ## if LINECNT > 1000, then read the next HEPevt file list
 #declare -i LINECNT=10189
 LINECNT=$((PROCESS+1))
-if (($LINECNT > 1000)); then
-   ((LINECNT%=1000))
-   FileListName="gntp_updated_HEPevt_3_splited_file_50evts.list"
-fi
-
 
 ## the HEPevt file list that will be used
 FileList=$DirName"/"$FileListName
