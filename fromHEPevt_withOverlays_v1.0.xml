@@ -18,7 +18,7 @@
 <!ENTITY template_fcl "HEPevt_AddOverlay_batch_TEMPLATE.fcl">
 <!ENTITY local_fcl "HEPevt_AddOverlay_batch_LOCAL.fcl">
 <!ENTITY HEP_tar "/pnfs/uboone/resilient/users/markross/tars/SplittingHEP_40evts.tar">
-<!ENTITY unzip_sript "/pnfs/uboone/resilient/users/markross/scripts/unzip_script_HEPevt.sh">
+<!ENTITY unzip_script "/pnfs/uboone/resilient/users/markross/scripts/unzip_script_HEPevt.sh">
 ]>
 
 <project name="&name;">
@@ -56,7 +56,7 @@
     <fcl>&local_fcl;</fcl>
     <outdir>/pnfs/uboone/scratch/users/&user_id;/&tag;/&release;/genartroot/&name;</outdir>
     <logdir>/pnfs/uboone/scratch/users/&user_id;/&tag;/&release;/genartroot/&name;</logdir>
-    <bookdir>/uboone/data/users/&user_id;/book/&tag;/&release;/genartroot/&name;</bookdir>
+    <bookdir>/exp/uboone/data/users/&user_id;/book/&tag;/&release;/genartroot/&name;</bookdir>
     <workdir>/pnfs/uboone/resilient/users/&user_id;/work/&tag;/&release;/genartroot/&name;</workdir>
     <numjobs>&number_of_jobs;</numjobs>
     <schema>gsiftp</schema>
