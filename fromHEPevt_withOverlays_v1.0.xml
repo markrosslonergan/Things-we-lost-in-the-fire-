@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY user_id "markross">
+<!ENTITY number_of_jobs "2">
+<!ENTITY number_of_events "80"> 
+<!ENTITY num_file_per_job "1"> 
+<!ENTITY num_event_per_file "40"> 
+<!ENTITY name "fromHEPevt_tutorial_v1">
+<!ENTITY release "v08_00_00_82"> 
+<!ENTITY file_type "mc">
+<!ENTITY run_type "physics">
+<!ENTITY tag "MCC9_HEPevt_withOverlays">
+<!ENTITY prod_mode "test"> 
+<!ENTITY template_fcl "HEPevt_AddOverlay_batch_TEMPLATE.fcl">
+<!ENTITY local_fcl "HEPevt_AddOverlay_batch_LOCAL.fcl">
+]>
+
+<project name="&name;">
+
+  <!-- Project size -->
+  <numevents>&number_of_events;</numevents>
+
+  <!-- Operating System -->
+  <os>SL7</os>
+
+  <!-- Batch resources -->
+  <resource>OPPORTUNISTIC,DEDICATED</resource>
+  
+  <!-- Project Version -->
+  <version>&prod_mode;_&release;</version>
+
+  <!-- Larsoft information -->
+  <larsoft>
+    <tag>&release;</tag>
+    <qual>e17:prof</qual>
+    <!--<local>/pnfs/uboone/resilient/users/markross/tars/TextGen_ExtraInfo.tar</local>-->
+  </larsoft>
+
+  <check>0</check>
+  <copy>0</copy>
+
+   <fcldir>/uboone/app/users/gge/CoherentGamma/fhicls</fcldir>
+
+  <!-- Project stages -->
+
+  <!-- First stage, turn HEPevt into artroot, and add overlays -->
+  <stage name="genartroot">
+    <initsource>/pnfs/uboone/resilient/users/markross/scripts/unzip_script_HEPevt.sh</initsource>
+    <inputdef>markross_gLEE_DarkNus_Overlay_prod_extunbiased_swizzle_inclusive_v3_goodruns_mcc9_run1_high_lifetime_overlay_bnb_nu_lowE_40min</inputdef>
+    <fcl>&local_fcl;</fcl>
+    <outdir>/pnfs/uboone/scratch/users/&user_id;/&tag;/&release;/genartroot/&name;</outdir>
+    <logdir>/pnfs/uboone/scratch/users/&user_id;/&tag;/&release;/genartroot/&name;</logdir>
+    <bookdir>/uboone/data/users/&user_id;/book/&tag;/&release;/genartroot/&name;</bookdir>
+    <workdir>/pnfs/uboone/resilient/users/&user_id;/work/&tag;/&release;/genartroot/&name;</workdir>
+    <numjobs>&number_of_jobs;</numjobs>
+    <schema>gsiftp</schema>
+    <maxfilesperjob>&num_file_per_job;</maxfilesperjob>
+    <numevents>&num_event_per_file;</numevents>
+    <disk>35GB</disk>
+    <memory>2000</memory> <!-- 2k-->
+     <!--<prestagefraction>0.8</prestagefraction>-->
+     <jobsub> --expected-lifetime=long --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' </jobsub>
+     <jobsub_start>   --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' -f /pnfs/uboone/resilient/users/markross/TextGenLists/KeystoneTestPoints_Jan2023_v1.tar -f &template_fcl; </jobsub_start>
+  </stage>  
+
+  <!-- Second stage, do a full-chain simulation to the artroot output from previous stage -->
+  <stage name="reco1">
+    <fcl>wirecell_g4_uboone.fcl</fcl>
+    <fcl>wirecell_detsim_overlay_uboone.fcl</fcl>
+    <fcl>standard_overlay_uboone.fcl</fcl>
+    <fcl>reco_uboone_mcc9_8_driver_overlay_stage1a.fcl</fcl>
+    <fcl>reco_uboone_mcc9_8_driver_overlay_stage1b.fcl</fcl>
+    <fcl>reco_uboone_mcc9_8_driver_overlay_stage1c.fcl</fcl>
+    <outdir>/pnfs/uboone/scratch/users/&user_id;/&tag;/&release;/reco1/&name;</outdir>
+    <logdir>/pnfs/uboone/scratch/users/&user_id;/&tag;/&release;/reco1/&name;</logdir>
+    <bookdir>/uboone/data/users/&user_id;/book/&tag;/&release;/reco1/&name;</bookdir>
+    <workdir>/pnfs/uboone/resilient/users/&user_id;/work/&tag;/&release;/reco1/&name;</workdir>
+    <numjobs>583</numjobs>
+    <schema>gsiftp</schema>
+    <maxfilesperjob>&num_file_per_job;</maxfilesperjob>
+    <datatier>reconstructed</datatier>
+    <disk>35GB</disk>
+    <memory>6000</memory> <!-- 6k-->
+    <jobsub> --expected-lifetime=long --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' </jobsub>
+    <jobsub_start>   --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)'</jobsub_start>
+  </stage>  
+ 
+
+  <!-- Second stage, do a full-chain simulation to the artroot output from previous stage -->
+  <stage name="reco2">
+    <fcl>reco_uboone_mcc9_8_driver_overlay_stage2.fcl</fcl>
+    <outdir>/pnfs/uboone/scratch/users/&user_id;/&tag;/&release;/reco2/&name;</outdir>
+    <logdir>/pnfs/uboone/scratch/users/&user_id;/&tag;/&release;/reco2/&name;</logdir>
+    <bookdir>/uboone/data/users/&user_id;/book/&tag;/&release;/reco2/&name;</bookdir>
+    <workdir>/pnfs/uboone/resilient/users/&user_id;/work/&tag;/&release;/reco2/&name;</workdir>
+    <numjobs>&number_of_jobs;</numjobs>
+    <schema>gsiftp</schema>
+    <maxfilesperjob>&num_file_per_job;</maxfilesperjob>
+    <disk>35GB</disk>
+    <memory>6000</memory> <!-- 6k-->
+    <jobsub> --expected-lifetime=long --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)' </jobsub>
+    <jobsub_start>   --append_condor_requirements='(TARGET.HAS_CVMFS_uboone_opensciencegrid_org==true)'</jobsub_start>
+  </stage>  
+ 
+  <!-- file type -->
+  <filetype>&file_type;</filetype>
+
+  <!-- run type -->
+  <runtype>&run_type;</runtype>
+
+</project>
